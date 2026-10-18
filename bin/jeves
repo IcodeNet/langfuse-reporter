@@ -1,0 +1,4 @@
+#!/usr/bin/env sh
+# Launcher: resolves symlinks so it works from ~/.local/bin, then runs the TypeScript entry via tsx.
+here=$(dirname "$(readlink -f "$0")")
+NODE_NO_WARNINGS=1 exec "$here/../node_modules/.bin/tsx" "$here/../src/index.ts" "$@"
