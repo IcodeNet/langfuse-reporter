@@ -1,0 +1,27 @@
+{
+  "data": [
+    {
+      "projectId": "proj-1",
+      "source": "API",
+      "environment": "production",
+      "createdAt": "2026-09-02T10:16:20.000Z",
+      "updatedAt": "2026-09-02T10:16:20.000Z",
+      "id": "sc-4",
+      "name": "feedback_inaccurate",
+      "dataType": "CATEGORICAL",
+      "value": "inaccurate",
+      "timestamp": "2026-09-03T08:00:00.000Z",
+      "comment": null,
+      "configId": null,
+      "metadata": {},
+      "subject": {
+        "kind": "observation",
+        "id": "obs-2",
+        "traceId": "trace-2"
+      }
+    }
+  ],
+  "meta": {
+    "limit": 100
+  }
+}

@@ -1,0 +1,41 @@
+# Weekly check of user feedback in Langfuse, for GitHub Actions.
+# Needs three repository secrets: LANGFUSE_PUBLIC_KEY, LANGFUSE_SECRET_KEY and LANGFUSE_BASE_URL.
+# The report files are kept as a build artifact. They hold customer text, so keep the retention short.
+name: feedback-weekly
+
+on:
+  schedule:
+    - cron: '0 7 * * 1'
+  workflow_dispatch: {}
+
+jobs:
+  feedback:
+    runs-on: ubuntu-latest
+    env:
+      LANGFUSE_BASE_URL: ${{ secrets.LANGFUSE_BASE_URL }}
+      LANGFUSE_PUBLIC_KEY: ${{ secrets.LANGFUSE_PUBLIC_KEY }}
+      LANGFUSE_SECRET_KEY: ${{ secrets.LANGFUSE_SECRET_KEY }}
+    steps:
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+
+      - name: Install
+        run: npm install -g @icodenet/langfuse-reporter
+
+      - name: Check the setup
+        run: jeves doctor --json
+
+      - name: Write last week's report
+        id: export
+        run: |
+          jeves feedback export --format csv --json --out reports --fail-if-empty \
+            --from "$(date -u -d '7 days ago' +%F)" --to "$(date -u -d 'tomorrow' +%F)" > export.json
+          cat export.json
+
+      - name: Keep the files
+        uses: actions/upload-artifact@v4
+        with:
+          name: feedback-report
+          path: reports
+          retention-days: 7

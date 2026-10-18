@@ -1,0 +1,46 @@
+{
+  "data": [
+    {
+      "id": "obs-1",
+      "traceId": "trace-1",
+      "startTime": "2026-09-02T10:16:13.805Z",
+      "endTime": "2026-09-02T10:16:19.000Z",
+      "projectId": "proj-1",
+      "parentObservationId": null,
+      "type": "SPAN",
+      "name": "chat-turn",
+      "level": "DEFAULT",
+      "environment": "production",
+      "sessionId": "session-1",
+      "userId": "user-1",
+      "isRootObservation": false,
+      "input": "What is the rate?",
+      "output": "The rate is 4.1%."
+    },
+    {
+      "id": "obs-3",
+      "traceId": "trace-1",
+      "startTime": "2026-09-02T10:20:00.000Z",
+      "endTime": "2026-09-02T10:16:19.000Z",
+      "projectId": "proj-1",
+      "parentObservationId": null,
+      "type": "SPAN",
+      "name": "chat-turn",
+      "level": "DEFAULT",
+      "environment": "production",
+      "sessionId": "session-1",
+      "userId": "user-1",
+      "isRootObservation": false,
+      "input": {
+        "role": "user",
+        "content": "And for 12 months?"
+      },
+      "output": {
+        "text": "4.3%"
+      }
+    }
+  ],
+  "meta": {
+    "cursor": "cursor-page-2"
+  }
+}

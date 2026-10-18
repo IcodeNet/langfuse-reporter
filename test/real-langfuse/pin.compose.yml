@@ -1,0 +1,7 @@
+# Pins the two Langfuse images to one fixed version, so a Langfuse release cannot break the daily run overnight.
+# Update LANGFUSE_VERSION in the workflow, and the tags here, on purpose when moving to a newer version.
+services:
+  langfuse-web:
+    image: docker.langfuse.com/langfuse/langfuse:4.63.0
+  langfuse-worker:
+    image: docker.langfuse.com/langfuse/langfuse-worker:4.63.0

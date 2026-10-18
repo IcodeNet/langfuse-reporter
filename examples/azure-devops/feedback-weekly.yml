@@ -1,0 +1,48 @@
+# Weekly check of user feedback in Langfuse, for Azure Pipelines.
+# Needs a variable group with three secret variables: LANGFUSE_PUBLIC_KEY, LANGFUSE_SECRET_KEY and
+# LANGFUSE_BASE_URL. Secret variables are not passed to a script on their own, so each is mapped below.
+schedules:
+  - cron: '0 7 * * 1'
+    displayName: Monday 07:00 UTC
+    branches:
+      include: [main]
+    always: true
+
+trigger: none
+
+pool:
+  vmImage: ubuntu-latest
+
+variables:
+  - group: langfuse-feedback
+
+steps:
+  - task: NodeTool@0
+    inputs:
+      versionSpec: '20.x'
+
+  - script: npm install -g @icodenet/langfuse-reporter
+    displayName: Install
+
+  - script: jeves doctor --json
+    displayName: Check the setup
+    env:
+      LANGFUSE_BASE_URL: $(LANGFUSE_BASE_URL)
+      LANGFUSE_PUBLIC_KEY: $(LANGFUSE_PUBLIC_KEY)
+      LANGFUSE_SECRET_KEY: $(LANGFUSE_SECRET_KEY)
+
+  - script: |
+      jeves feedback export --format csv --json --out reports --fail-if-empty \
+        --from "$(date -u -d '7 days ago' +%F)" --to "$(date -u -d 'tomorrow' +%F)" > export.json
+      cat export.json
+    displayName: Write last week's report
+    env:
+      LANGFUSE_BASE_URL: $(LANGFUSE_BASE_URL)
+      LANGFUSE_PUBLIC_KEY: $(LANGFUSE_PUBLIC_KEY)
+      LANGFUSE_SECRET_KEY: $(LANGFUSE_SECRET_KEY)
+
+  - task: PublishPipelineArtifact@1
+    inputs:
+      targetPath: reports
+      artifact: feedback-report
+      publishLocation: pipeline

@@ -1,0 +1,122 @@
+// jeves reference config: every setting in one place, with what it does.
+//
+// How to use it:
+//   1. Copy this file to where you keep your config, or point at it directly:
+//        jeves --config docs/config.json.local config check
+//   2. Change the values marked CHANGE ME, then run: jeves config check
+//   3. A wrong value is reported with its path, for example conventions.turnName.
+//
+// Comments (// and /* */) are allowed in this file. Note that `config set`, `config use` and
+// `config unset` rewrite the file as plain JSON, so they remove these comments. Keep this
+// reference copy for reading and let the CLI manage your own copy.
+//
+// Every setting except "activeProfile" and "profiles" is optional: anything left out takes the
+// default shown here. The Langfuse keys are NOT in this file; they live in the env file named
+// by each profile.
+{
+  // Which profile to use when you do not pass --profile. Must be a name in "profiles" below.
+  "activeProfile": "dev",
+
+  // Folder the Excel files are written to. Optional. Without it, files go to a "reports" folder
+  // inside the package. Use an absolute path. CHANGE ME.
+  "outDir": "/home/you/feedback-exports",
+
+  // How YOUR Langfuse records feedback. The defaults match the setup in docs/langfuse-setup.md.
+  // If your project uses other names, change them here and run `config check`.
+  "conventions": {
+    // Name of the observation that holds one question and its answer.
+    "turnName": "chat-turn",
+
+    // Name of the thumbs score recorded on a turn. Its value says thumbs up or down.
+    // Must not contain a comma.
+    "ratingScore": "feedback_helpful",
+
+    // Text before each reason in its score name. A reason score is the prefix plus a reason from
+    // the list below, e.g. "feedback_" + "other_issue" = "feedback_other_issue". Must not contain a comma.
+    "reasonScorePrefix": "feedback_",
+
+    // Reasons a user can tick, exactly as they appear after the prefix. No duplicates, no commas.
+    // The first six are usually for thumbs down and the last six for thumbs up, but the CLI reads
+    // whichever reasons are present on a rating.
+    "reasons": [
+      "wrong_answer",
+      "incomplete_answer",
+      "off_topic",
+      "hard_to_follow",
+      "harmful_content",
+      "other_issue",
+      "well_explained",
+      "correct_answer",
+      "fast_response",
+      "easy_to_follow",
+      "useful_detail",
+      "on_topic"
+    ],
+
+    // Rating score values that mean thumbs up. Anything else counts as thumbs down.
+    "yesValues": ["true", "1"],
+
+    // Which risk area each reason belongs to, as "reason=area". The areas are the ones eval-dashboards
+    // groups by: compliance, pii, content-safety, prompt-safety, tone-of-voice, factuality, response-quality,
+    // tool-use, tool-routing, groundedness, relevance, custom. What you list is added to these five built-in
+    // pairs and wins when it names the same reason; to switch a built-in pair off, set it to "custom".
+    // A reason no pair names counts as "custom". The eval-report file and live-vs-offline use this map.
+    "riskAreas": [
+      "wrong_answer=factuality",
+      "incomplete_answer=response-quality",
+      "off_topic=relevance",
+      "hard_to_follow=tone-of-voice",
+      "harmful_content=content-safety"
+    ],
+
+    // Name shown on the answer column of the Excel files.
+    "assistantName": "Assistant",
+
+    // Words shown for a thumbs up and a thumbs down in the Excel files.
+    "passLabel": "Pass",
+    "failLabel": "Fail"
+  },
+
+  // The model used by `docs` and `analyse`. Optional: without it those commands fall back to
+  // showing the most relevant parts of the docs, or ask you to set a model up.
+  // The key itself is LLM_API_KEY in the profile's env file, never in this file.
+  "llm": {
+    // One of: litellm, openai, anthropic, gemini.
+    "provider": "litellm",
+
+    // Model name as your provider or LiteLLM gateway names it. CHANGE ME.
+    "model": "<model name on your gateway>",
+
+    // Gateway URL. Required for litellm, optional for the others. CHANGE ME.
+    "baseUrl": "https://your-gateway.example.com"
+  },
+
+  // Saved queries for `jeves query run <name>`. Optional. Add them with `jeves query save`.
+  // A rule is a measure, a comparison and a number: count, negative-count or negative-rate
+  // (0 to 1) with <=, >=, <, > or =. Exit codes: 0 all pass, 1 a rule failed, 2 could not check.
+  "queries": {
+    "weekly-health": {
+      // today, yesterday, a number of days such as 7d, this-week, last-week, this-month or last-month. Default last-month.
+      "window": "7d",
+      // Same filter language as --where. Leave out to use every rating.
+      "where": "has_comment = true",
+      "rules": ["negative-rate <= 0.2", "count >= 50"]
+    }
+  },
+
+  // One entry per Langfuse project you read from. Switch with `config use <name>` or --profile.
+  "profiles": {
+    "dev": {
+      // Langfuse address. Use https://cloud.langfuse.com for the EU cloud.
+      "baseUrl": "https://cloud.langfuse.com",
+
+      // File holding LANGFUSE_PUBLIC_KEY and LANGFUSE_SECRET_KEY for this profile (and
+      // optionally LLM_API_KEY). Use an absolute path. Keep these files out of git. CHANGE ME.
+      "envFile": "/home/you/repo/dev.env"
+    },
+    "prod": {
+      "baseUrl": "https://cloud.langfuse.com",
+      "envFile": "/home/you/repo/prod.env"
+    }
+  }
+}

@@ -1,0 +1,14 @@
+{
+  "data": [
+    {
+      "id": "proj-1",
+      "name": "Customer Chat",
+      "organization": {
+        "id": "org-1",
+        "name": "Example Org"
+      },
+      "metadata": {},
+      "retentionDays": null
+    }
+  ]
+}

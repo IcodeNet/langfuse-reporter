@@ -1,0 +1,13 @@
+{
+  "data": [
+    {
+      "environment": "production"
+    },
+    {
+      "environment": "staging"
+    },
+    {
+      "environment": ""
+    }
+  ]
+}

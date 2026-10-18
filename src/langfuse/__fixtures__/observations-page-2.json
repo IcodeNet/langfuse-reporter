@@ -1,0 +1,22 @@
+{
+  "data": [
+    {
+      "id": "obs-4",
+      "traceId": "trace-1",
+      "startTime": "2026-09-02T10:25:00.000Z",
+      "endTime": "2026-09-02T10:16:19.000Z",
+      "projectId": "proj-1",
+      "parentObservationId": null,
+      "type": "SPAN",
+      "name": "chat-turn",
+      "level": "DEFAULT",
+      "environment": "production",
+      "sessionId": null,
+      "userId": null,
+      "isRootObservation": false,
+      "input": null,
+      "output": null
+    }
+  ],
+  "meta": {}
+}

@@ -1,0 +1,51 @@
+name: Publish
+
+# Publishes to npm when a version tag is pushed, with provenance (a signed record of which commit and workflow built it).
+# Needs a repository secret NPM_TOKEN: a granular token limited to this package, with publish rights only.
+on:
+  push:
+    tags:
+      - 'v*'
+
+permissions:
+  contents: read
+  id-token: write
+
+jobs:
+  publish:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+      - uses: pnpm/action-setup@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: pnpm
+          registry-url: https://registry.npmjs.org
+      - run: pnpm install --frozen-lockfile
+      - run: pnpm typecheck
+      - run: pnpm lint
+      - run: pnpm test
+      - run: pnpm audit --prod
+
+      - name: The tag must match the package version
+        run: |
+          VERSION="$(node -p "require('./package.json').version")"
+          if [ "v$VERSION" != "$GITHUB_REF_NAME" ]; then
+            echo "::error::Tag $GITHUB_REF_NAME does not match package.json version $VERSION"
+            exit 1
+          fi
+
+      - name: Check what would be published
+        run: |
+          npm pack --dry-run 2>&1 | tee pack.txt
+          if grep -E "PLAN\.md|design-review|[[:space:]]\.env|\.env$|\.test\.|[[:space:]]src/" pack.txt; then
+            echo "::error::The package contains files that should not be published"
+            exit 1
+          fi
+
+      - name: Publish with provenance
+        run: npm publish --provenance --access public
+        env:
+          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}

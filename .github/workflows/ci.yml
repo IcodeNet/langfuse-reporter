@@ -1,0 +1,87 @@
+name: CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+
+permissions:
+  contents: read
+
+jobs:
+  check:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v4
+      - uses: pnpm/action-setup@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: pnpm
+      - run: pnpm install --frozen-lockfile
+      - run: pnpm typecheck
+      - run: pnpm lint
+      - run: pnpm format:check
+      - run: pnpm build
+      - run: pnpm build:ui
+      - run: pnpm test
+      - name: Audit the production dependencies
+        run: pnpm audit --prod
+      - name: Browser click-through
+        run: |
+          npx --yes playwright@1.64.1 install --with-deps chromium
+          pnpm e2e:ui
+
+  node20:
+    # pnpm 11 and vitest need Node 22, so install, build and test with 22; this job runs the built program on the minimum Node this package supports.
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v4
+      - uses: pnpm/action-setup@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: pnpm
+      - run: pnpm install --frozen-lockfile
+      - run: pnpm build
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20.11
+      - run: node --version
+      - run: node dist/index.js --version
+      - run: node dist/index.js --demo feedback export --dry-run --json
+      - name: Export every format and read the Excel file back
+        run: |
+          export HOME="$RUNNER_TEMP/home" NO_COLOR=1
+          mkdir -p "$HOME" "$RUNNER_TEMP/out"
+          node dist/index.js --demo feedback export --out "$RUNNER_TEMP/out"
+          node dist/index.js --demo feedback export --format csv --out "$RUNNER_TEMP/out"
+          node dist/index.js --demo feedback export --format json --out "$RUNNER_TEMP/out"
+          node dist/index.js --demo feedback export --format eval-report --out "$RUNNER_TEMP/out"
+          ls "$RUNNER_TEMP/out"
+          test "$(ls "$RUNNER_TEMP/out" | wc -l)" -ge 7
+          A="$(ls "$RUNNER_TEMP"/out/feedback-negative-*.xlsx | head -1)"
+          node dist/index.js compare "$A" "$A" --out "$RUNNER_TEMP/out"
+          node dist/index.js --demo query run --all || test "$?" -eq 1
+
+  package:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+      - uses: pnpm/action-setup@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: pnpm
+      - run: pnpm install --frozen-lockfile
+      - name: Pack, install into an empty folder and run
+        run: |
+          npm pack --pack-destination "$RUNNER_TEMP"
+          mkdir "$RUNNER_TEMP/empty" && cd "$RUNNER_TEMP/empty"
+          npm init -y >/dev/null
+          npm install "$RUNNER_TEMP"/icodenet-langfuse-reporter-*.tgz
+          ./node_modules/.bin/jeves --version
+          ./node_modules/.bin/jeves --demo

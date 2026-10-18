@@ -1,0 +1,71 @@
+name: Real Langfuse
+
+# Starts Langfuse's own open-source stack, seeds it through its public API and runs the tool against it.
+# Heavy (six containers), so it runs on request and once a day in the evening (UTC), not on every push.
+# Langfuse is pinned to LANGFUSE_VERSION (compose file and both images), so a Langfuse release cannot fail it overnight.
+on:
+  workflow_dispatch:
+  schedule:
+    - cron: '0 19 * * *'
+
+permissions:
+  contents: read
+
+jobs:
+  real-langfuse:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    env:
+      LANGFUSE_VERSION: v4.63.0
+      LANGFUSE_BASE_URL: http://127.0.0.1:3000
+      LANGFUSE_PUBLIC_KEY: pk-lf-ci-0000000000000000
+      LANGFUSE_SECRET_KEY: sk-lf-ci-0000000000000000
+    steps:
+      - uses: actions/checkout@v4
+      - uses: pnpm/action-setup@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: pnpm
+      - run: pnpm install --frozen-lockfile
+      - run: pnpm build
+
+      - name: Fetch Langfuse's own compose file at the pinned version
+        run: curl -sfL "https://raw.githubusercontent.com/langfuse/langfuse/${LANGFUSE_VERSION}/docker-compose.yml" -o langfuse-compose.yml
+
+      - name: Start Langfuse with a project and keys created at start
+        # Only the project, keys and user are set here. The database, cache and storage keep the compose file's own
+        # defaults, because its connection strings are built from those defaults: changing one side breaks the other.
+        # Nothing is reachable from outside this runner, and it is deleted when the job ends.
+        env:
+          NEXTAUTH_SECRET: ci-only-nextauth-secret-0123456789
+          SALT: ci-only-salt-0123456789
+          LANGFUSE_INIT_ORG_ID: ci-org
+          LANGFUSE_INIT_PROJECT_ID: ci-project
+          LANGFUSE_INIT_PROJECT_NAME: ci-project
+          LANGFUSE_INIT_PROJECT_PUBLIC_KEY: ${{ env.LANGFUSE_PUBLIC_KEY }}
+          LANGFUSE_INIT_PROJECT_SECRET_KEY: ${{ env.LANGFUSE_SECRET_KEY }}
+          LANGFUSE_INIT_USER_EMAIL: ci@example.com
+          LANGFUSE_INIT_USER_PASSWORD: ci-only-password-123
+        run: docker compose -f langfuse-compose.yml -f test/real-langfuse/pin.compose.yml up -d
+
+      - name: Wait until Langfuse answers
+        run: |
+          for i in $(seq 1 60); do
+            curl -sf http://127.0.0.1:3000/api/public/health && exit 0
+            sleep 5
+          done
+          echo "::error::Langfuse did not become healthy within 5 minutes. This is a slow start or a broken stack, not a failure of the tool."
+          docker compose -f langfuse-compose.yml -f test/real-langfuse/pin.compose.yml ps
+          docker compose -f langfuse-compose.yml -f test/real-langfuse/pin.compose.yml logs --tail 80
+          exit 1
+
+      - name: Seed ratings through the public API
+        run: node test/real-langfuse/seed.mjs
+
+      - name: Run the tool against it
+        run: node test/real-langfuse/check.mjs
+
+      - name: Show the container logs when a step failed
+        if: failure()
+        run: docker compose -f langfuse-compose.yml -f test/real-langfuse/pin.compose.yml logs --tail 120

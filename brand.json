@@ -1,0 +1,7 @@
+{
+  "name": "Jeves",
+  "command": "jeves",
+  "aliases": [],
+  "configDir": "langfuse-reporter",
+  "launcher": "./dist/index.js"
+}

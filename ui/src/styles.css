@@ -1,0 +1,647 @@
+:root {
+  color-scheme: light dark;
+  font-family: system-ui, sans-serif;
+}
+body {
+  margin: 0;
+  background: #0d1117;
+  color: #e6edf3;
+}
+main {
+  max-width: 760px;
+  margin: 0 auto;
+  padding: 32px 20px;
+}
+h1 {
+  margin: 12px 0 4px;
+  font-size: 1.1rem;
+  color: #9da7b3;
+  font-weight: 500;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+header p {
+  color: #9da7b3;
+  margin: 0 0 16px;
+}
+button {
+  background: #f5c518;
+  color: #0d1117;
+  border: 0;
+  border-radius: 6px;
+  padding: 8px 16px;
+  font-weight: 600;
+  cursor: pointer;
+}
+button:disabled {
+  opacity: 0.6;
+  cursor: wait;
+}
+.summary {
+  margin: 20px 0 8px;
+  font-weight: 600;
+}
+.error {
+  color: #ff7b72;
+}
+.checks {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  display: grid;
+  gap: 8px;
+}
+.check {
+  display: flex;
+  gap: 12px;
+  padding: 12px 14px;
+  border-radius: 8px;
+  background: #161b22;
+  border-left: 4px solid #30363d;
+}
+.check.ok {
+  border-left-color: #3fb950;
+}
+.check.warn {
+  border-left-color: #d29922;
+}
+.check.fail {
+  border-left-color: #f85149;
+}
+.mark {
+  font-weight: 700;
+  width: 1.2em;
+  text-align: center;
+}
+.label {
+  font-weight: 600;
+}
+.word {
+  font-weight: 400;
+  color: #9da7b3;
+  margin-left: 6px;
+}
+.detail {
+  color: #c9d1d9;
+  overflow-wrap: anywhere;
+}
+.fix {
+  margin-top: 6px;
+  color: #9da7b3;
+}
+code {
+  background: #0d1117;
+  padding: 2px 6px;
+  border-radius: 4px;
+  overflow-wrap: anywhere;
+}
+
+.logo {
+  display: block;
+  width: min(420px, 100%);
+  height: auto;
+}
+footer {
+  margin-top: 40px;
+  padding-top: 20px;
+  border-top: 1px solid #30363d;
+  color: #9da7b3;
+  font-size: 0.8rem;
+}
+.langfuse {
+  height: 28px;
+  display: block;
+  margin-bottom: 10px;
+}
+
+.check.ok .mark {
+  color: #3fb950;
+}
+.check.warn .mark {
+  color: #d29922;
+}
+.check.fail .mark {
+  color: #f85149;
+}
+.check.skip .mark {
+  color: #8b949e;
+}
+
+h2 {
+  margin: 18px 0 6px;
+  font-size: 1.35rem;
+}
+h3 {
+  margin: 18px 0 8px;
+  font-size: 1rem;
+  color: #c9d1d9;
+}
+.hint {
+  color: #9da7b3;
+  margin: 4px 0 10px;
+}
+nav[aria-label='Pages'] {
+  display: flex;
+  gap: 8px;
+  margin-top: 12px;
+}
+.tab {
+  background: #161b22;
+  color: #c9d1d9;
+  border: 1px solid #30363d;
+}
+.tab.on {
+  background: #f5c518;
+  color: #0d1117;
+  border-color: #f5c518;
+}
+.steps {
+  list-style: none;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  padding: 0;
+  margin: 18px 0 8px;
+}
+.steps li {
+  padding: 6px 10px;
+  border-radius: 999px;
+  background: #161b22;
+  color: #8b949e;
+  font-size: 0.85rem;
+}
+.steps li span {
+  font-weight: 700;
+  margin-right: 4px;
+}
+.steps li.now {
+  background: #f5c518;
+  color: #0d1117;
+}
+.steps li.past {
+  color: #3fb950;
+}
+.choices {
+  display: grid;
+  gap: 8px;
+  margin: 10px 0;
+}
+.choice {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 2px;
+  text-align: left;
+  background: #161b22;
+  color: #e6edf3;
+  border: 1px solid #30363d;
+  padding: 12px 14px;
+}
+.choice small {
+  color: #9da7b3;
+  font-weight: 400;
+}
+.choice.on {
+  border-color: #f5c518;
+  box-shadow: 0 0 0 1px #f5c518 inset;
+}
+.chips {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin: 6px 0 12px;
+}
+.chip {
+  background: #161b22;
+  color: #e6edf3;
+  border: 1px solid #30363d;
+  font-weight: 500;
+}
+.chip.on {
+  background: #f5c518;
+  color: #0d1117;
+  border-color: #f5c518;
+  font-weight: 600;
+}
+.field {
+  margin: 16px 0;
+}
+.field label {
+  font-weight: 600;
+}
+.row {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+  align-items: center;
+}
+input:not([type='checkbox']) {
+  flex: 1;
+  min-width: 220px;
+  background: #0d1117;
+  color: #e6edf3;
+  border: 1px solid #30363d;
+  border-radius: 6px;
+  padding: 8px 10px;
+  font: inherit;
+}
+.ghost {
+  background: transparent;
+  color: #c9d1d9;
+  border: 1px solid #30363d;
+}
+.ok-text {
+  color: #3fb950;
+  margin: 6px 0;
+}
+.nav {
+  display: flex;
+  justify-content: space-between;
+  margin-top: 28px;
+}
+.current {
+  margin: 8px 0;
+  overflow-wrap: anywhere;
+}
+.project {
+  font-size: 1.1rem;
+  margin-top: 14px;
+}
+.project small {
+  color: #8b949e;
+}
+.mark.good {
+  color: #3fb950;
+}
+.picker {
+  margin: 14px 0;
+  padding: 14px;
+  background: #161b22;
+  border: 1px solid #30363d;
+  border-radius: 8px;
+}
+.picker-head {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 8px;
+}
+.path {
+  color: #9da7b3;
+  font-family: ui-monospace, monospace;
+  font-size: 0.85rem;
+  overflow-wrap: anywhere;
+}
+.entries {
+  list-style: none;
+  padding: 0;
+  margin: 8px 0;
+  max-height: 260px;
+  overflow: auto;
+}
+.entry {
+  width: 100%;
+  text-align: left;
+  background: transparent;
+  color: #e6edf3;
+  border-radius: 4px;
+  font-weight: 400;
+  padding: 4px 8px;
+}
+.entry:hover:not(:disabled) {
+  background: #21262d;
+}
+.entry:disabled {
+  color: #6e7681;
+  cursor: default;
+}
+
+.presets {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin: 10px 0;
+}
+.row label {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  color: #9da7b3;
+  font-size: 0.85rem;
+}
+.tablewrap {
+  overflow-x: auto;
+  border: 1px solid #30363d;
+  border-radius: 8px;
+  margin: 10px 0;
+}
+.grid {
+  border-collapse: collapse;
+  width: 100%;
+  font-size: 0.85rem;
+}
+.grid th,
+.grid td {
+  text-align: left;
+  padding: 8px 10px;
+  border-bottom: 1px solid #21262d;
+  vertical-align: top;
+}
+.grid td {
+  max-width: 320px;
+  overflow-wrap: anywhere;
+}
+.grid th {
+  background: #161b22;
+  position: sticky;
+  top: 0;
+}
+.grid tr.neg td:nth-child(2) {
+  color: #f85149;
+  font-weight: 600;
+}
+.grid tr.pos td:nth-child(2) {
+  color: #3fb950;
+  font-weight: 600;
+}
+.th {
+  background: transparent;
+  color: #e6edf3;
+  padding: 0;
+  font-weight: 600;
+}
+.pager {
+  display: flex;
+  gap: 12px;
+  align-items: center;
+  flex-wrap: wrap;
+  margin: 8px 0 16px;
+}
+.pager label {
+  display: flex;
+  flex-direction: row;
+  gap: 6px;
+  align-items: center;
+  color: #9da7b3;
+  margin-left: auto;
+}
+select {
+  background: #0d1117;
+  color: #e6edf3;
+  border: 1px solid #30363d;
+  border-radius: 6px;
+  padding: 4px 8px;
+}
+.confirm {
+  margin: 12px 0;
+  padding: 12px 14px;
+  border-radius: 8px;
+  background: #2d2307;
+  border-left: 4px solid #d29922;
+}
+.result {
+  margin: 16px 0;
+  padding: 12px 14px;
+  border-radius: 8px;
+  background: #161b22;
+  border-left: 4px solid #3fb950;
+}
+.files {
+  list-style: none;
+  padding: 0;
+  margin: 6px 0 0;
+}
+.files li {
+  margin: 4px 0;
+  overflow-wrap: anywhere;
+}
+.themes {
+  white-space: pre-wrap;
+  color: #c9d1d9;
+  background: #0d1117;
+  padding: 10px;
+  border-radius: 6px;
+  font-size: 0.85rem;
+}
+input[type='date'] {
+  color-scheme: dark;
+}
+
+.doc {
+  margin: 16px 0;
+  line-height: 1.55;
+}
+.doc h1,
+.doc h2,
+.doc h3 {
+  color: #e6edf3;
+}
+.doc h1 {
+  font-size: 1.5rem;
+  margin-top: 28px;
+}
+.doc h2 {
+  font-size: 1.25rem;
+  margin-top: 26px;
+  border-bottom: 1px solid #21262d;
+  padding-bottom: 4px;
+}
+.doc a {
+  color: #f5c518;
+}
+.doc pre {
+  background: #161b22;
+  padding: 12px;
+  border-radius: 8px;
+  overflow-x: auto;
+}
+.doc code,
+.hit code {
+  background: #161b22;
+  padding: 1px 5px;
+  border-radius: 4px;
+}
+.doc pre code {
+  background: transparent;
+  padding: 0;
+}
+.doc table {
+  border-collapse: collapse;
+  margin: 12px 0;
+  display: block;
+  overflow-x: auto;
+}
+.doc th,
+.doc td {
+  border: 1px solid #30363d;
+  padding: 6px 10px;
+  text-align: left;
+}
+.doc img {
+  max-width: 100%;
+}
+.hits {
+  margin: 14px 0;
+}
+.hit {
+  padding: 12px 14px;
+  margin: 10px 0;
+  border-radius: 8px;
+  background: #161b22;
+  border-left: 4px solid #f5c518;
+}
+.hit h4 {
+  margin: 0 0 6px;
+}
+
+.noimg {
+  color: #8b949e;
+  font-size: 0.85em;
+  margin-right: 4px;
+}
+
+.grid td:first-child {
+  white-space: nowrap;
+}
+.grid td:nth-child(2) {
+  white-space: nowrap;
+}
+.grid td {
+  min-width: 6em;
+}
+.grid td {
+  overflow-wrap: break-word;
+  word-break: normal;
+}
+.grid td:nth-child(3) {
+  min-width: 9em;
+}
+
+.diagram {
+  display: block;
+  max-width: 100%;
+  height: auto;
+  margin: 16px 0;
+  padding: 12px;
+  background: #161b22;
+  border-radius: 8px;
+}
+.diagram-source {
+  overflow-x: auto;
+}
+
+.doc thead th {
+  background: #161b22;
+  font-weight: 600;
+}
+.doc tbody tr:nth-child(even) {
+  background: #0f141b;
+}
+.doc td,
+.doc th {
+  vertical-align: top;
+}
+.doc td code {
+  white-space: nowrap;
+}
+
+.doc-source {
+  white-space: pre-wrap;
+  overflow-wrap: anywhere;
+  background: #161b22;
+  padding: 14px 16px;
+  border-radius: 8px;
+  font-size: 0.82rem;
+  line-height: 1.55;
+  color: #c9d1d9;
+}
+.doc-source code {
+  background: transparent;
+  padding: 0;
+}
+
+.doc pre {
+  white-space: pre;
+  overflow-x: auto;
+  line-height: 1.5;
+  font-size: 0.85rem;
+  margin: 12px 0;
+}
+.doc pre code {
+  display: block;
+  background: transparent;
+  padding: 0;
+  white-space: pre;
+}
+
+.doc pre.doc-source code {
+  white-space: pre-wrap;
+}
+
+/* last on purpose: the text page wraps its long comment lines; every other block scrolls sideways */
+.doc pre.doc-source,
+.doc pre.doc-source code {
+  white-space: pre-wrap;
+  overflow-wrap: anywhere;
+}
+
+.doc table {
+  table-layout: auto;
+}
+.doc th,
+.doc td {
+  overflow-wrap: anywhere;
+}
+
+.doc .table-scroll {
+  overflow-x: auto;
+  margin: 14px 0;
+  max-width: 100%;
+}
+.doc .table-scroll table {
+  display: table;
+  width: 100%;
+  table-layout: auto;
+}
+.doc .table-scroll td,
+.doc .table-scroll th {
+  overflow-wrap: anywhere;
+  min-width: 7em;
+}
+.doc h1 {
+  text-transform: none;
+  letter-spacing: normal;
+  font-weight: 700;
+  color: #e6edf3;
+}
+
+.doc .doc-source {
+  background: #161b22;
+  padding: 14px 16px;
+  border-radius: 8px;
+  font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
+  font-size: 0.82rem;
+  line-height: 1.55;
+  color: #c9d1d9;
+  margin: 12px 0;
+}
+.doc .doc-line {
+  white-space: pre-wrap;
+  overflow-wrap: anywhere;
+  min-height: 1.55em;
+}
+
+/* last on purpose: inline code in a table cell may wrap, so a long message never widens the table */
+.doc td code,
+.doc th code {
+  white-space: normal;
+  overflow-wrap: anywhere;
+  word-break: break-word;
+}
+.doc .table-scroll table {
+  table-layout: fixed;
+}
+.doc .table-scroll td,
+.doc .table-scroll th {
+  min-width: 0;
+}

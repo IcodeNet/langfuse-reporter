@@ -1,0 +1,67 @@
+{
+  "data": [
+    {
+      "projectId": "proj-1",
+      "source": "API",
+      "environment": "production",
+      "createdAt": "2026-09-02T10:16:20.000Z",
+      "updatedAt": "2026-09-02T10:16:20.000Z",
+      "id": "sc-1",
+      "name": "feedback_helpful",
+      "dataType": "BOOLEAN",
+      "value": true,
+      "timestamp": "2026-09-02T10:16:20.000Z",
+      "comment": null,
+      "configId": null,
+      "metadata": {},
+      "subject": {
+        "kind": "observation",
+        "id": "obs-1",
+        "traceId": "trace-1"
+      }
+    },
+    {
+      "projectId": "proj-1",
+      "source": "API",
+      "environment": "production",
+      "createdAt": "2026-09-02T10:16:20.000Z",
+      "updatedAt": "2026-09-02T10:16:20.000Z",
+      "id": "sc-2",
+      "name": "feedback_helpful",
+      "dataType": "BOOLEAN",
+      "value": false,
+      "timestamp": "2026-09-02T11:02:00.000Z",
+      "comment": "Wrong rate quoted",
+      "configId": null,
+      "metadata": {},
+      "subject": {
+        "kind": "observation",
+        "id": "obs-2",
+        "traceId": "trace-2"
+      }
+    },
+    {
+      "projectId": "proj-1",
+      "source": "API",
+      "environment": "production",
+      "createdAt": "2026-09-02T10:16:20.000Z",
+      "updatedAt": "2026-09-02T10:16:20.000Z",
+      "id": "sc-3",
+      "name": "feedback_helpful",
+      "dataType": "NUMERIC",
+      "value": 1,
+      "timestamp": "2026-09-02T11:30:00.000Z",
+      "comment": null,
+      "configId": null,
+      "metadata": {},
+      "subject": {
+        "kind": "trace",
+        "id": "trace-3"
+      }
+    }
+  ],
+  "meta": {
+    "limit": 100,
+    "cursor": "cursor-page-2"
+  }
+}

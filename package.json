@@ -1,0 +1,82 @@
+{
+    "name": "@icodenet/langfuse-reporter",
+    "version": "0.1.0",
+    "private": false,
+    "type": "module",
+    "description": "Query, report on and analyse Langfuse observations from the command line.",
+    "keywords": [
+        "langfuse",
+        "feedback",
+        "thumbs",
+        "llm",
+        "ai-agent",
+        "evaluation",
+        "evals",
+        "observability",
+        "cli",
+        "excel",
+        "csv",
+        "eval-report"
+    ],
+    "author": "Byron Thanopoulos <byronth@gmail.com> (https://github.com/IcodeNet)",
+    "license": "MIT",
+    "homepage": "https://github.com/IcodeNet/langfuse-reporter#readme",
+    "bugs": {
+        "url": "https://github.com/IcodeNet/langfuse-reporter/issues"
+    },
+    "repository": {
+        "type": "git",
+        "url": "git+https://github.com/IcodeNet/langfuse-reporter.git"
+    },
+    "publishConfig": {
+        "access": "public"
+    },
+    "engines": {
+        "node": ">=20.11"
+    },
+    "bin": {
+        "jeves": "./dist/index.js"
+    },
+    "files": [
+        "dist",
+        "dist-ui",
+        "docs",
+        "skills",
+        "examples",
+        "brand.json",
+        "README.md",
+        "CHANGELOG.md",
+        "LICENSE"
+    ],
+    "scripts": {
+        "start": "tsx src/index.ts",
+        "typecheck": "tsc --noEmit && pnpm --filter @jeves/ui typecheck",
+        "test": "vitest run",
+        "lint": "oxlint .",
+        "format": "oxfmt --write .",
+        "format:check": "oxfmt --check .",
+        "brand:sync": "tsx src/brand/sync-package.ts",
+        "build:ui": "pnpm --filter @jeves/ui build",
+        "e2e:ui": "node ui/e2e/setup.e2e.cjs",
+        "build": "tsup",
+        "prepack": "pnpm build && pnpm build:ui",
+        "shots:ui": "node ui/e2e/readme-shots.cjs"
+    },
+    "dependencies": {
+        "commander": "^15.0.0",
+        "dotenv": "^16.0.0",
+        "zod": "^4.6.6"
+    },
+    "devDependencies": {
+        "@types/node": "^22.0.0",
+        "exceljs": "^4.4.0",
+        "oxfmt": "^0.57.0",
+        "oxlint": "^1.74.0",
+        "tsup": "^8.5.0",
+        "tsx": "^4.21.0",
+        "typescript": "^7.0.2",
+        "vitest": "^4.1.11",
+        "yaml": "^2.9.1"
+    },
+    "packageManager": "pnpm@11.13.1+sha512.b2fc7683b8a6525414e7d13e1ba28caaddde96bf66ec540bfaeb7e702b81f3e0be4d1f295edf7f9fe0396740a8dce4509c582ddf79891f4543fea32d37645f25"
+}
